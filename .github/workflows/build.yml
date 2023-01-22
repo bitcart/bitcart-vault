@@ -1,3 +1,5 @@
+name: Build
+
 on:
   push:
 
@@ -7,7 +9,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: ["windows", "ubuntu-latest", "macos-latest"]
+        os: ["windows-latest", "ubuntu-latest", "macos-latest"]
 
     steps:
       - uses: actions/checkout@v3
