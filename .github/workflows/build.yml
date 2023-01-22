@@ -7,16 +7,30 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: ["windows-latest", "ubuntu-latest", "macos-latest"]
+        os: ["windows", "ubuntu-latest", "macos-latest"]
 
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
         with:
           python-version: 3.8
-
+      - run: pip install -U wheel setuptools pip
       - run: pip install -r requirements.txt pyinstaller
       - run: pyinstaller vault.spec
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
+        if: ${{ matrix.os == 'windows-latest' }}
         with:
-          path: dist/*
+          name: bitcart-vault-windows.exe
+          path: dist/vault.exe
+
+      - uses: actions/upload-artifact@v3
+        if: ${{ matrix.os == 'ubuntu-latest' }}
+        with:
+          name: bitcart-vault-linux
+          path: dist/vault
+
+      - uses: actions/upload-artifact@v3
+        if: ${{ matrix.os == 'macos-latest' }}
+        with:
+          name: bitcart-vault-macos
+          path: dist/vault
