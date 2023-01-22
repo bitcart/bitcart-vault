@@ -9,7 +9,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: ["windows-latest", "ubuntu-latest", "macos-latest"]
+        os: ["windows-2019", "ubuntu-18.04", "macos-10.15"]
 
     steps:
       - uses: actions/checkout@v3
@@ -20,19 +20,19 @@ jobs:
       - run: pip install -r requirements.txt pyinstaller
       - run: pyinstaller vault.spec
       - uses: actions/upload-artifact@v3
-        if: ${{ matrix.os == 'windows-latest' }}
+        if: ${{ matrix.os == 'windows-2019' }}
         with:
           name: bitcart-vault-windows.exe
           path: dist/vault.exe
 
       - uses: actions/upload-artifact@v3
-        if: ${{ matrix.os == 'ubuntu-latest' }}
+        if: ${{ matrix.os == 'ubuntu-18.04' }}
         with:
           name: bitcart-vault-linux
           path: dist/vault
 
       - uses: actions/upload-artifact@v3
-        if: ${{ matrix.os == 'macos-latest' }}
+        if: ${{ matrix.os == 'macos-10.15' }}
         with:
           name: bitcart-vault-macos
           path: dist/vault
