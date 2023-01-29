@@ -21,7 +21,7 @@ jobs:
             briefcase-data-dir: ~\AppData\Local\BeeWare\briefcase\Cache
             pip-cache-dir: ~\AppData\Local\pip\Cache
             docker-cache-dir: C:\ProgramData\DockerDesktop
-            output-path: windows\BitcartCC Vault-1.0.0.msi
+            output-path: windows/BitcartCC Vault-1.0.0.msi
           - os-name: linux
             # Need to use at least 22.04 to get the bugfix in flatpak for handling spaces in filenames.
             platform: ubuntu-22.04
