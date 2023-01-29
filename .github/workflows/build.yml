@@ -32,7 +32,7 @@ jobs:
             output-path: linux/BitcartCC_Vault-1.0.0-x86_64.AppImage
     steps:
       - name: Cache Briefcase tools
-        uses: actions/cache@v3.2.3
+        uses: actions/cache@v3
         with:
           key: briefcase-${{ matrix.platform }}
           path: |
@@ -40,7 +40,7 @@ jobs:
             ${{ matrix.briefcase-data-dir }}
             ${{ matrix.pip-cache-dir }}
             ${{ matrix.docker-cache-dir }}
-      - uses: actions/checkout@v3.3.0
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - uses: actions/setup-python@v4
@@ -54,8 +54,14 @@ jobs:
           briefcase create
           briefcase build
           briefcase package --adhoc-sign
-      - name: Upload App
+      - name: Upload App artifacts
         uses: actions/upload-artifact@v3
         with:
           name: bitcart-vault-${{ matrix.os-name }}
           path: ${{ matrix.output-path }}
+
+      - name: Add to release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: ${{ matrix.output-path }}

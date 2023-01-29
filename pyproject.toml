@@ -13,7 +13,7 @@ description = "a bridge to HWI to access hardware devices functions"
 icon = "src/vault/resources/vault"
 sources = ['src/vault']
 requires = [
-    'pyside2',
+    'pyside2==5.15.2.1',
     'flask==2.2.2',
     'flask-cors==3.0.10',
     'hwi==2.2.0'

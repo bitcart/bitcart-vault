@@ -3,12 +3,19 @@ import logging
 import os
 import sys
 
+import PySide2
 from flask import Flask, request
 from flask_cors import CORS
 from hwilib import commands
 from PySide2 import QtCore, QtGui, QtWidgets
 from PySide2.QtUiTools import QUiLoader
 from werkzeug.serving import make_server
+
+dirname = os.path.dirname(PySide2.__file__)
+plugin_path = os.path.join(dirname, "plugins", "platforms")
+if not os.path.exists(plugin_path):
+    plugin_path = os.path.join(dirname, "Qt", "plugins", "platforms")
+os.environ["QT_QPA_PLATFORM_PLUGIN_PATH"] = plugin_path
 
 loader = QUiLoader()
 
