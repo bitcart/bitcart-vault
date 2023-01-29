@@ -1,0 +1,51 @@
+[tool.briefcase]
+project_name = "BitcartCC Vault"
+bundle = "com.bitcartcc"
+version = "0.0.1"
+url = "https://github.com/bitcartcc/bitcart-vault"
+license = "MIT license"
+author = 'BitcartCC'
+author_email = "hello@bitcartcc.com"
+
+[tool.briefcase.app.vault]
+formal_name = "BitcartCC Vault"
+description = "a bridge to HWI to access hardware devices functions"
+icon = "src/vault/resources/vault"
+sources = ['src/vault']
+requires = [
+    'pyside2',
+    'flask==2.2.2',
+    'flask-cors==3.0.10',
+    'hwi==2.2.0'
+]
+
+
+[tool.briefcase.app.vault.macOS]
+requires = [
+    'std-nslog~=1.0.0'
+]
+
+[tool.briefcase.app.vault.linux]
+requires = []
+
+[tool.briefcase.app.vault.linux.appimage]
+system_requires = []
+linuxdeploy_plugins = []
+
+[tool.briefcase.app.vault.linux.flatpak]
+flatpak_runtime = 'org.kde.Platform'
+flatpak_runtime_version = '6.3'
+flatpak_sdk = 'org.kde.Sdk'
+
+[tool.briefcase.app.vault.windows]
+requires = []
+
+# Mobile deployments
+[tool.briefcase.app.vault.iOS]
+supported = false
+
+[tool.briefcase.app.vault.android]
+supported = false
+
+[tool.briefcase.app.vault.web]
+supported = false
