@@ -2,13 +2,11 @@ import inspect
 import logging
 import os
 import sys
-import threading
-import time
 
 from flask import Flask, request
 from flask_cors import CORS
 from hwilib import commands
-from PyQt5 import QtWidgets, uic
+from PyQt5 import QtCore, QtWidgets, uic
 from werkzeug.serving import make_server
 
 
@@ -21,9 +19,20 @@ def resource_path(relative_path):
     return os.path.join(base_path, relative_path)
 
 
-class PermissionManager:
+if hasattr(sys, "_MEIPASS"):  # dummy streams in noconsole mode
+    f = open(os.devnull, "w")
+    sys.stdin = f
+    sys.stdout = f
+
+
+class PermissionManager(QtCore.QObject):
+    set_permission = QtCore.pyqtSignal(str)
+
     def __init__(self):
+        super().__init__()
         self.allowed_origins = {}
+        self.wait_condition = QtCore.QWaitCondition()
+        self.mutex = QtCore.QMutex()
 
     def check_origin(self, origin):
         if origin not in self.allowed_origins:
@@ -31,18 +40,10 @@ class PermissionManager:
         return origin in self.allowed_origins
 
     def ask_permission(self, origin):
-        window.ask_permission = True
-        window.current_origin = origin
-        window.response = None
-        label_text = window.permission_dialog.warning_label.text()
-        window.permission_dialog.warning_label.setText(
-            label_text.format(website=origin)
-        )
-        window.permission_dialog.show()
-        window.main_dialog.hide()
-        while window.ask_permission:
-            time.sleep(0.1)
-        window.permission_dialog.warning_label.setText(label_text)
+        self.mutex.lock()
+        self.set_permission.emit(origin)
+        self.wait_condition.wait(self.mutex)
+        self.mutex.unlock()
         if window.response:
             self.allowed_origins[origin] = True
 
@@ -57,18 +58,30 @@ class MainWindow(QtWidgets.QMainWindow):
         self.permission_dialog = PermissionDialog()
         self.permission_dialog.accept_button.clicked.connect(self.accept_permission)
         self.permission_dialog.reject_button.clicked.connect(self.reject_permission)
+        permission_manager.set_permission.connect(self.init_ask_permission)
+
+    def init_ask_permission(self, origin):
+        self.ask_permission = True
+        self.current_origin = origin
+        self.response = None
+        label_text = self.permission_dialog.warning_label.text()
+        self.permission_dialog.warning_label.setText(label_text.format(website=origin))
+        self.permission_dialog.show()
+        self.main_dialog.hide()
+
+    def _base_permission_set(self, result):
+        self.permission_dialog.hide()
+        self.permission_dialog.reset_label()
+        self.main_dialog.show()
+        self.response = result
+        self.ask_permission = False
+        permission_manager.wait_condition.wakeAll()
 
     def accept_permission(self):
-        self.permission_dialog.close()
-        self.main_dialog.show()
-        self.response = True
-        self.ask_permission = False
+        self._base_permission_set(True)
 
     def reject_permission(self):
-        self.permission_dialog.close()
-        self.main_dialog.show()
-        self.response = False
-        self.ask_permission = False
+        self._base_permission_set(False)
 
 
 class MainDialog(QtWidgets.QDialog):
@@ -83,20 +96,21 @@ class PermissionDialog(QtWidgets.QDialog):
     def __init__(self):
         super().__init__()
         uic.loadUi(resource_path("resources/permission_dialog.ui"), self)
+        self.original_label = self.warning_label.text()
+
+    def reset_label(self):
+        self.warning_label.setText(self.original_label)
 
 
-class ServerThread(threading.Thread):
+class ServerThread(QtCore.QThread):
     def __init__(self, app):
-        threading.Thread.__init__(self)
+        super().__init__()
         self.server = make_server("127.0.0.1", 5000, app)
         self.ctx = app.app_context()
         self.ctx.push()
 
     def run(self):
         self.server.serve_forever()
-
-    def shutdown(self):
-        self.server.shutdown()
 
 
 logging.basicConfig(level=logging.ERROR)
@@ -142,8 +156,6 @@ thread = ServerThread(flask_app)
 thread.start()
 
 app = QtWidgets.QApplication(sys.argv)
+app.aboutToQuit.connect(thread.terminate)
 window = MainWindow()
-try:
-    app.exec_()
-finally:
-    thread.shutdown()
+app.exec_()
