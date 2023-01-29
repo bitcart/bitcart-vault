@@ -46,11 +46,6 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: 3.8
-      - name: Install system dependencies
-        if: matrix.platform == 'ubuntu-22.04'
-        run: |
-          sudo apt-get update -y
-          sudo apt-get install -y flatpak flatpak-builder
       - name: Install briefcase
         run: |
           pip install briefcase
