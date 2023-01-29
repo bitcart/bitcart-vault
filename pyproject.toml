@@ -1,7 +1,7 @@
 [tool.briefcase]
 project_name = "BitcartCC Vault"
 bundle = "com.bitcartcc"
-version = "0.0.1"
+version = "1.0.0"
 url = "https://github.com/bitcartcc/bitcart-vault"
 license = "MIT license"
 author = 'BitcartCC'
