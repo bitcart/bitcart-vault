@@ -8,21 +8,21 @@ jobs:
     runs-on: ${{ matrix.platform }}
     strategy:
       matrix:
-        os_name: ["macOS", "windows", "linux"]
+        os-name: ["macOS", "windows", "linux"]
         include:
-          - os_name: macOS
+          - os-name: macOS
             platform: macos-12
             briefcase-data-dir: ~/Library/Caches/org.beeware.briefcase
             pip-cache-dir: ~/Library/Caches/pip
             docker-cache-dir: ~/Library/Containers/com.docker.docker/Data/vms/0/
             output-path: macOS/BitcartCC Vault-1.0.0.dmg
-          - os_name: windows
+          - os-name: windows
             platform: windows-latest
             briefcase-data-dir: ~\AppData\Local\BeeWare\briefcase\Cache
             pip-cache-dir: ~\AppData\Local\pip\Cache
             docker-cache-dir: C:\ProgramData\DockerDesktop
             output-path: windows\BitcartCC Vault-1.0.0.msi
-          - os_name: linux
+          - os-name: linux
             # Need to use at least 22.04 to get the bugfix in flatpak for handling spaces in filenames.
             platform: ubuntu-22.04
             briefcase-data-dir: ~/.cache/briefcase
@@ -62,5 +62,5 @@ jobs:
       - name: Upload App
         uses: actions/upload-artifact@v3
         with:
-          name: bitcart-vault-${{ matrix.os_name }}
-          path: ${{ matrix.output_path }}
+          name: bitcart-vault-${{ matrix.os-name }}
+          path: ${{ matrix.output-path }}
