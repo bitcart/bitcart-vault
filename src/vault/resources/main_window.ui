@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>BitcartCC Vault</string>
+   <string>Bitcart Vault</string>
   </property>
   <property name="windowIcon">
    <iconset>
@@ -34,7 +34,7 @@
     </font>
    </property>
    <property name="text">
-    <string>Welcome to BitcartCC Vault</string>
+    <string>Welcome to Bitcart Vault</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_3">

@@ -1,14 +1,14 @@
 [tool.briefcase]
-project_name = "BitcartCC Vault"
-bundle = "com.bitcartcc"
+project_name = "Bitcart Vault"
+bundle = "com.bitcart"
 version = "1.0.0"
-url = "https://github.com/bitcartcc/bitcart-vault"
+url = "https://github.com/bitcart/bitcart-vault"
 license = "MIT license"
-author = 'BitcartCC'
-author_email = "hello@bitcartcc.com"
+author = 'Bitcart'
+author_email = "hello@bitcart.ai"
 
 [tool.briefcase.app.vault]
-formal_name = "BitcartCC Vault"
+formal_name = "Bitcart Vault"
 description = "a bridge to HWI to access hardware devices functions"
 icon = "src/vault/resources/vault"
 sources = ['src/vault']

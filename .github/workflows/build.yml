@@ -15,13 +15,13 @@ jobs:
             briefcase-data-dir: ~/Library/Caches/org.beeware.briefcase
             pip-cache-dir: ~/Library/Caches/pip
             docker-cache-dir: ~/Library/Containers/com.docker.docker/Data/vms/0/
-            output-path: macOS/BitcartCC Vault-1.0.0.dmg
+            output-path: macOS/Bitcart Vault-1.0.0.dmg
           - os-name: windows
             platform: windows-latest
             briefcase-data-dir: ~\AppData\Local\BeeWare\briefcase\Cache
             pip-cache-dir: ~\AppData\Local\pip\Cache
             docker-cache-dir: C:\ProgramData\DockerDesktop
-            output-path: windows/BitcartCC Vault-1.0.0.msi
+            output-path: windows/Bitcart Vault-1.0.0.msi
           - os-name: linux
             # Need to use at least 22.04 to get the bugfix in flatpak for handling spaces in filenames.
             platform: ubuntu-22.04
@@ -29,7 +29,7 @@ jobs:
             pip-cache-dir: ~/.cache/pip
             # cache action cannot cache docker images (actions/cache#31)
             # docker-cache-dir: /var/lib/docker
-            output-path: linux/BitcartCC_Vault-1.0.0-x86_64.AppImage
+            output-path: linux/Bitcart_Vault-1.0.0-x86_64.AppImage
     steps:
       - name: Cache Briefcase tools
         uses: actions/cache@v3
